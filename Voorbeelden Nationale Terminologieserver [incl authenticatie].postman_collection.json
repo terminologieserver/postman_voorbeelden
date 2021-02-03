@@ -1,0 +1,954 @@
+{
+	"info": {
+		"_postman_id": "62ed3606-cb41-41b7-91bf-c58682e8fd9a",
+		"name": "Voorbeelden Nationale Terminologieserver [incl authenticatie]",
+		"description": "Deze collectie gebruikt variabelen uit de environment:\n- username\n- password\n\nDeze moeten overeenkomen met de gebruikersnaam en wachtwoord van je account in de Nationale Terminologieserver.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Metadata",
+			"item": [
+				{
+					"name": "About",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/metadata",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"metadata"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Syndication feed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/synd/syndication.xml",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"synd",
+								"syndication.xml"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Batch",
+			"item": [
+				{
+					"name": "Batch $lookup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/fhir+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/fhir+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"type\" : \"batch\",\n   \"resourceType\" : \"Bundle\",\n   \"entry\" : [\n      {\n         \"request\" : {\n            \"method\" : \"POST\",\n            \"url\" : \"CodeSystem/$lookup\"\n         },\n         \"resource\" : {\n            \"resourceType\" : \"Parameters\",\n            \"parameter\" : [\n               {\n                  \"valueUri\" : \"http://loinc.org\",\n                  \"name\" : \"system\"\n               },\n               {\n                  \"valueCode\" : \"23245-4\",\n                  \"name\" : \"code\"\n               }\n            ]\n         }\n      },\n      {\n         \"resource\" : {\n            \"parameter\" : [\n               {\n                  \"name\" : \"system\",\n                  \"valueUri\" : \"http://snomed.info/sct\"\n               },\n               {\n                  \"valueCode\" : \"311989004\",\n                  \"name\" : \"code\"\n               }\n            ],\n            \"resourceType\" : \"Parameters\"\n         },\n         \"request\" : {\n            \"method\" : \"POST\",\n            \"url\" : \"CodeSystem/$lookup\"\n         }\n      }\n   ]\n}\n"
+						},
+						"url": {
+							"raw": "{{url}}/fhir",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir"
+							]
+						},
+						"description": "The request sends two lookups - one of a LOINC code and one of a SNOMED CT code."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CodeSystem",
+			"item": [
+				{
+					"name": "Lookup",
+					"item": [
+						{
+							"name": "Lookup ICF code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?code=d198&system=http://hl7.org/fhir/sid/icf-nl",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "d198"
+										},
+										{
+											"key": "property",
+											"value": "parent",
+											"disabled": true
+										},
+										{
+											"key": "system",
+											"value": "http://hl7.org/fhir/sid/icf-nl"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SNOMED lookup patient friendly term",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?code=74400008&system=http://snomed.info/sct&version=http://snomed.info/sct/15561000146104&property=display",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "property",
+											"value": "lang.nl",
+											"description": "Voegt alle NL designations toe",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": "74400008"
+										},
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "version",
+											"value": "http://snomed.info/sct/15561000146104"
+										},
+										{
+											"key": "property",
+											"value": "display"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lookup SNOMED code",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://snomed.info/sct&code=74400008",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "code",
+											"value": "74400008"
+										},
+										{
+											"key": "property",
+											"value": "designation",
+											"disabled": true
+										},
+										{
+											"key": "property",
+											"value": "parent",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lookup SNOMED postcoördinatie",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://snomed.info/sct&code=%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "code",
+											"value": "%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Validate",
+					"item": [
+						{
+							"name": "Validate Code SNOMED postcoördinatie [langzaam]",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/fhir+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/11000146104-20200930/$validate-code?code=%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"11000146104-20200930",
+										"$validate-code"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://snomed.info/sct?fhir_vs",
+											"disabled": true
+										},
+										{
+											"key": "codeSystem",
+											"value": "http://snomed.info/sct",
+											"disabled": true
+										},
+										{
+											"key": "display",
+											"value": "foo",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": "%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Closure",
+					"item": [
+						{
+							"name": "[LANGZAAM] SNOMED + Postco Complicatie/Allergie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code is 200\"] = responseCode.code === 200;",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"tests[\"Response body is Parameters\"] = jsonData.resourceType === 'Parameters';",
+											"tests[\"Parameter has key 'name' with value 'outcome\"] = jsonData.parameter[0].name === 'outcome';"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "system",
+										"value": "http://snomed.info/sct",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"resourceType\" : \"Parameters\",\n  \"parameter\" : [\n    {\n      \"name\" : \"system\",\n      \"valueUri\" : \"http://snomed.info/sct\"\n    },\n    {   \n        \"name\" : \"codeA\",\n        \"valueString\" : \"116223007 |complicatie (aandoening)|\"\n    },\n    {   \n        \"name\" : \"codeB\",\n        \"valueString\" : \"=== 281647001 |Adverse reaction (disorder)|: {370135005 |pathologisch proces| = 472964009 |allergisch proces|,246075003 |veroorzaker (attribuut)| = 735124003 |gerst (substantie)|}\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$subsumes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$subsumes"
+									]
+								},
+								"description": "Definiëert een codeA en codeB in de request Body."
+							},
+							"response": []
+						},
+						{
+							"name": "SNOMED + Postco Appendicitis vs Postco-Expressie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"tests[\"Status code is 200\"] = responseCode.code === 200;",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"tests[\"Response body is Parameters\"] = jsonData.resourceType === 'Parameters';",
+											"tests[\"Parameter has key 'name' with value 'outcome\"] = jsonData.parameter[0].name === 'outcome';",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "system",
+										"value": "http://snomed.info/sct",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"resourceType\" : \"Parameters\",\n  \"parameter\" : [\n    {\n      \"name\" : \"system\",\n      \"valueUri\" : \"http://snomed.info/sct\"\n    },\n    {   \n        \"name\" : \"codeA\",\n        \"valueString\" : \"74400008 |appendicitis (aandoening)|\"\n    },\n    {   \n        \"name\" : \"codeB\",\n        \"valueString\" : \"=== 64572001 |aandoening (aandoening)| : { 116676008 |gerelateerde morfologie (attribuut)| = 409774005 |inflammatoire morfologie (afwijkende morfologie)|, 363698007 |locatie van bevinding (attribuut)| = 66754008 |structuur van appendix vermiformis (lichaamsstructuur)| }\"\n    }\n  ]\n}"
+								},
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$subsumes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$subsumes"
+									]
+								},
+								"description": "Initialise the closure table"
+							},
+							"response": []
+						}
+					],
+					"description": "Example usage of the $closure operation.\n",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Zoek alle CodeSystems, toon alleen naam en url",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem?_elements=name,url,version",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem"
+							],
+							"query": [
+								{
+									"key": "_elements",
+									"value": "name,url,version"
+								},
+								{
+									"key": "identifier",
+									"value": "2.16.840.1.113883.6.254",
+									"description": "icf",
+									"disabled": true
+								},
+								{
+									"key": "version",
+									"value": "1.000.000.003",
+									"description": "icf",
+									"disabled": true
+								},
+								{
+									"key": "url",
+									"value": "http://hl7.org/fhir/sid/icf-nl",
+									"description": "icf",
+									"disabled": true
+								},
+								{
+									"key": "url",
+									"value": "http://hl7.org/fhir/sid/icd-10-nl",
+									"description": "icd-10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open specifiek CodeSystem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem/fc1fd6fd-0354-4419-bebf-bd55568a1deb",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem",
+								"fc1fd6fd-0354-4419-bebf-bd55568a1deb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Zoek alle CodeSystems waarvan de URL start met http://snomed.info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem?url:below=http://snomed.info",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem"
+							],
+							"query": [
+								{
+									"key": "url:below",
+									"value": "http://snomed.info"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ValueSet",
+			"item": [
+				{
+					"name": "Expand",
+					"item": [
+						{
+							"name": "Expand SNOMED ValueSet patient friendly terms",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://snomed.info/sct/15561000146104?fhir_vs=ecl/233604007",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://snomed.info/sct/15561000146104?fhir_vs=ecl/233604007"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Expand valueset ICD-10",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://hl7.org/fhir/sid/icd-10-nl/vs",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://hl7.org/fhir/sid/icd-10-nl/vs"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Toon alle SNOMED ValueSets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/ValueSet/$expand?url=http://snomed.info/sct?fhir_vs=refset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"ValueSet",
+								"$expand"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "http://snomed.info/sct?fhir_vs=refset"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Zoek naar ValueSet obv title",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/ValueSet/?title=aanuitkledencode",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"ValueSet",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "aanuitkledencode"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open specifieke ValueSet ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/ValueSet/2.16.840.1.113883.2.4.3.11.60.40.2.4.2.8--20200901000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"ValueSet",
+								"2.16.840.1.113883.2.4.3.11.60.40.2.4.2.8--20200901000000"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ConceptMap",
+			"item": [
+				{
+					"name": "T45 - beeldvorming",
+					"item": [
+						{
+							"name": "$translate SNOMED via NHG45BO->SNOMED mapping",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=https://mlds.ihtsdotools.org/%23/releaseManagement/release/541921&system=urn:oid:2.16.840.1.113883.2.4.4.30.45&code=2241&target=http://snomed.info/sct",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://mlds.ihtsdotools.org/%23/releaseManagement/release/541921",
+											"description": "URL ConceptMap"
+										},
+										{
+											"key": "system",
+											"value": "urn:oid:2.16.840.1.113883.2.4.4.30.45",
+											"description": "Bron systeem"
+										},
+										{
+											"key": "code",
+											"value": "2241",
+											"description": "Code in bron"
+										},
+										{
+											"key": "target",
+											"value": "http://snomed.info/sct",
+											"description": "Doel systeem"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reverse $translate SNOMED op T45BO->SNOMED mapping",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=https://mlds.ihtsdotools.org/%23/releaseManagement/release/541921&reverse=true&system=http://snomed.info/sct&code=3671000087106",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://mlds.ihtsdotools.org/%23/releaseManagement/release/541921",
+											"description": "URL ConceptMap"
+										},
+										{
+											"key": "reverse",
+											"value": "true",
+											"description": "Reverse lookup"
+										},
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct",
+											"description": "Doel systeem"
+										},
+										{
+											"key": "code",
+											"value": "3671000087106",
+											"description": "Code in doel"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ICPC1 -> SNOMED",
+					"item": [
+						{
+							"name": "$translate SNOMED op NHG45BO->SNOMED mapping Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=https://mlds.ihtsdotools.org/%23/releaseManagement/release/541913&system=http://hl7.org/fhir/sid/icpc-1-nl&code=A29.04&target=http://snomed.info/sct",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://mlds.ihtsdotools.org/%23/releaseManagement/release/541913",
+											"description": "URL ConceptMap"
+										},
+										{
+											"key": "system",
+											"value": "http://hl7.org/fhir/sid/icpc-1-nl",
+											"description": "Bron systeem"
+										},
+										{
+											"key": "code",
+											"value": "A29.04",
+											"description": "Code in bron"
+										},
+										{
+											"key": "target",
+											"value": "http://snomed.info/sct",
+											"description": "Doel systeem (optioneel)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reverse $translate SNOMED op ICPC->SNOMED mapping Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=https://mlds.ihtsdotools.org/%23/releaseManagement/release/541913&reverse=true&system=http://snomed.info/sct&code=723118001",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://mlds.ihtsdotools.org/%23/releaseManagement/release/541913",
+											"description": "URL ConceptMap"
+										},
+										{
+											"key": "reverse",
+											"value": "true",
+											"description": "Reverse lookup"
+										},
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct",
+											"description": "Doel systeem"
+										},
+										{
+											"key": "code",
+											"value": "723118001",
+											"description": "Code in doel"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Toon ConceptMaps",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/ConceptMap/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"ConceptMap",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
+					"",
+					"let tokenUrl = 'https://terminologieserver.nl/auth/realms/nictiz/protocol/openid-connect/token';",
+					"",
+					"let getTokenRequest = {",
+					"    method: 'POST',",
+					"    url: tokenUrl,",
+					"    header: {",
+					"        'Accept': 'application/json',",
+					"        'Content-Type': 'application/x-www-form-urlencoded',",
+					"    },",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            { key: \"username\", value: pm.environment.get(\"username\") },",
+					"            { key: \"password\", value: pm.environment.get(\"password\") },",
+					"            { key: \"client_id\", value: 'cli_client' },",
+					"            { key: \"client_secret\", value: '' },",
+					"            { key: 'grant_type', value: 'password' },",
+					"        ]",
+					"    }",
+					"};",
+					"",
+					"pm.sendRequest(getTokenRequest, (err, response) => {",
+					"    let jsonResponse = response.json(),",
+					"        newAccessToken = jsonResponse.access_token;",
+					"",
+					"    console.log({ err, jsonResponse, newAccessToken })",
+					"",
+					"    pm.environment.set('accessToken', newAccessToken);",
+					"    pm.variables.set('accessToken', newAccessToken);",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://terminologieserver.nl"
+		},
+		{
+			"key": "username",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		}
+	]
+}
