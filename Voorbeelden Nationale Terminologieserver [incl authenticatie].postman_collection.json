@@ -144,49 +144,6 @@
 							"response": []
 						},
 						{
-							"name": "SNOMED lookup patient friendly term",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/fhir/CodeSystem/$lookup?code=74400008&system=http://snomed.info/sct&version=http://snomed.info/sct/15561000146104&property=display",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"fhir",
-										"CodeSystem",
-										"$lookup"
-									],
-									"query": [
-										{
-											"key": "property",
-											"value": "lang.nl",
-											"description": "Voegt alle NL designations toe",
-											"disabled": true
-										},
-										{
-											"key": "code",
-											"value": "74400008"
-										},
-										{
-											"key": "system",
-											"value": "http://snomed.info/sct"
-										},
-										{
-											"key": "version",
-											"value": "http://snomed.info/sct/15561000146104"
-										},
-										{
-											"key": "property",
-											"value": "display"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Lookup SNOMED code",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
@@ -226,35 +183,6 @@
 											"key": "property",
 											"value": "parent",
 											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Lookup SNOMED postcoördinatie",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://snomed.info/sct&code=%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"fhir",
-										"CodeSystem",
-										"$lookup"
-									],
-									"query": [
-										{
-											"key": "system",
-											"value": "http://snomed.info/sct"
-										},
-										{
-											"key": "code",
-											"value": "%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D"
 										}
 									]
 								}
@@ -454,7 +382,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/fhir/CodeSystem?_elements=name,url,version",
+							"raw": "{{url}}/fhir/CodeSystem?_elements=name,url,version&url=http://snomed.info/sct",
 							"host": [
 								"{{url}}"
 							],
@@ -468,18 +396,6 @@
 									"value": "name,url,version"
 								},
 								{
-									"key": "identifier",
-									"value": "2.16.840.1.113883.6.254",
-									"description": "icf",
-									"disabled": true
-								},
-								{
-									"key": "version",
-									"value": "1.000.000.003",
-									"description": "icf",
-									"disabled": true
-								},
-								{
 									"key": "url",
 									"value": "http://hl7.org/fhir/sid/icf-nl",
 									"description": "icf",
@@ -490,26 +406,12 @@
 									"value": "http://hl7.org/fhir/sid/icd-10-nl",
 									"description": "icd-10",
 									"disabled": true
+								},
+								{
+									"key": "url",
+									"value": "http://snomed.info/sct",
+									"description": "snomed"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Open specifiek CodeSystem",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/fhir/CodeSystem/fc1fd6fd-0354-4419-bebf-bd55568a1deb",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"fhir",
-								"CodeSystem",
-								"fc1fd6fd-0354-4419-bebf-bd55568a1deb"
 							]
 						}
 					},
@@ -534,6 +436,187 @@
 									"key": "url:below",
 									"value": "http://snomed.info"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Expand implicit SNOMED ValueSet [JSON]",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/ValueSet/$expand?url=http://snomed.info/sct?fhir_vs&count=50&offset=0&activeOnly=true&includeDefinition=false&displayLanguage=nl&includeDesignations=false",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"ValueSet",
+								"$expand"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "http://snomed.info/sct?fhir_vs",
+									"description": "url of the CodeSystem"
+								},
+								{
+									"key": "count",
+									"value": "50",
+									"description": "Paging support - how many codes should be provided in a partial view. If count = 0, the client is asking how large the expansion is."
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "Paging support - where to start if a subset is desired (default = 0). This refers to items, not pages, i.e. offset = 2 means that the second matching record will be returned, not the second page."
+								},
+								{
+									"key": "activeOnly",
+									"value": "true",
+									"description": "Whether or not inactive concepts are included in the expansion (false by default)"
+								},
+								{
+									"key": "includeDefinition",
+									"value": "false",
+									"description": "Whether or not to include the logical definition and metadata of the value set in the expansion (true by default)"
+								},
+								{
+									"key": "displayLanguage",
+									"value": "nl",
+									"description": "Specifies the language to be used for description in the expansions i.e. the language to be used for ValueSet.expansion.contains.display"
+								},
+								{
+									"key": "includeDesignations",
+									"value": "false",
+									"description": "Whether or not concepts included in the expansion should also come with their designations (false by default)"
+								},
+								{
+									"key": "filter",
+									"value": "appendicitis",
+									"description": "A text filter that is applied to restrict the codes that are returned (this is useful in a UI context). Ontoserver implements a multi-prefix match scoring algorithm.",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lookup SNOMED code [XML]",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://snomed.info/sct&code=74400008&property=designation",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem",
+								"$lookup"
+							],
+							"query": [
+								{
+									"key": "system",
+									"value": "http://snomed.info/sct"
+								},
+								{
+									"key": "code",
+									"value": "74400008"
+								},
+								{
+									"key": "property",
+									"value": "designation"
+								},
+								{
+									"key": "property",
+									"value": "parent",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lookup supplement Patientvriendelijke termen",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem/$lookup?system=https://terminologieserver.nl/uri/cs/snomed-patient-friendly-terms&code=74400008",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem",
+								"$lookup"
+							],
+							"query": [
+								{
+									"key": "property",
+									"value": "preferred-term",
+									"disabled": true
+								},
+								{
+									"key": "property",
+									"value": "b1-description",
+									"disabled": true
+								},
+								{
+									"key": "property",
+									"value": "parent",
+									"disabled": true
+								},
+								{
+									"key": "system",
+									"value": "https://terminologieserver.nl/uri/cs/snomed-patient-friendly-terms"
+								},
+								{
+									"key": "code",
+									"value": "74400008"
+								},
+								{
+									"key": "includeDesignations",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Open specifiek CodeSystem",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/fhir/CodeSystem/fc1fd6fd-0354-4419-bebf-bd55568a1deb",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"fhir",
+								"CodeSystem",
+								"fc1fd6fd-0354-4419-bebf-bd55568a1deb"
 							]
 						}
 					},
@@ -868,6 +951,963 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stelselspecifieke voorbeelden",
+			"item": [
+				{
+					"name": "SNOMED",
+					"item": [
+						{
+							"name": "SNOMED Supplement $lookup patient Patiëntvriendelijke termen",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?code=74400008&system=http://snomed.info/sct&version=http://snomed.info/sct/15561000146104&property=display",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "property",
+											"value": "lang.nl",
+											"description": "Voegt alle NL designations toe",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": "74400008"
+										},
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "version",
+											"value": "http://snomed.info/sct/15561000146104"
+										},
+										{
+											"key": "property",
+											"value": "display"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SNOMED ValueSet $expand Patiëntvriendelijke termen",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/xml",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=https://terminologieserver.nl/uri/vs/snomed-patient-friendly-terms&includeDesignations=true&filter=74400008&displayLanguage=nl-NL-x-sctlang-15551000-146102",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "https://terminologieserver.nl/uri/vs/snomed-patient-friendly-terms"
+										},
+										{
+											"key": "includeDesignations",
+											"value": "true"
+										},
+										{
+											"key": "filter",
+											"value": "74400008"
+										},
+										{
+											"key": "includeDefinition",
+											"value": "true",
+											"disabled": true
+										},
+										{
+											"key": "displayLanguage",
+											"value": "nl-NL-x-sctlang-15551000-146102"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lookup SNOMED postcoördinatie",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://snomed.info/sct&code=%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "code",
+											"value": "%3D%3D%3D%20281647001%20%7CAdverse%20reaction%20(disorder)%7C%3A%20%7B370135005%20%7Cpathologisch%20proces%7C%20%3D%20472964009%20%7Callergisch%20proces%7C%2C246075003%20%7Cveroorzaker%20(attribuut)%7C%20%3D%20735124003%20%7Cgerst%20(substantie)%7C%7D"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Labcodeset",
+					"item": [
+						{
+							"name": "1. Retrieve all codes in Labcodeset",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://labterminologie.nl/vs/labconcepts",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/vs/labconcepts"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1. Retrieve all active codes",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"parameter\": [\n        {\n            \"name\": \"valueSet\",\n            \"resource\": {\n                \"resourceType\": \"ValueSet\",\n                \"language\": \"nl-NL\",\n                \"extension\": [\n                    {\n                    \"url\": \"http://hl7.org/fhir/StructureDefinition/valueset-supplement\",\n                    \"valueCanonical\": \"http://labterminologie.nl/cs/labconcepts|20201022\"\n                    }\n                ],\n                \"compose\": {\n                    \"include\": [\n                        {\n                            \"system\": \"http://loinc.org\",\n                            \"valueSet\": \"http://labterminologie.nl/vs/labconcepts\",\n                            \"filter\": [\n                                {\n                                    \"property\": \"STATUS\",\n                                    \"op\": \"=\",\n                                    \"value\": \"active\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Lookup code for LCN, display and translation",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?code=29522-0&system=http://loinc.org&property=designation",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "29522-0"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "property",
+											"value": "designation"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3. Retrieve material SCT codes for LOINC code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-materials&system=http://loinc.org&code=38912-2&target=http://snomed.info/sct",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-materials"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "38912-2"
+										},
+										{
+											"key": "target",
+											"value": "http://snomed.info/sct"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4. Retrieve outcome sets for LOINC code (Refset)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-outcomes&system=http://loinc.org&code=66885-5",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-outcomes"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "66885-5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4. Retrieve outcome sets for LOINC code (ValueSet)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-outcomes&system=http://loinc.org&code=497-8",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-outcomes"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "497-8"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4. Lookup outcome Refset",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://snomed.info/sct?fhir_vs=refset/2581000146104",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://snomed.info/sct?fhir_vs=refset/2581000146104"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4. Lookup outcome ValueSet",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://labterminologie.nl/labconcepts-ordinal-2.16.840.1.113883.2.4.3.46.99.7.11.1.11",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/labconcepts-ordinal-2.16.840.1.113883.2.4.3.46.99.7.11.1.11"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5. Retrieve UCUM codes for LOINC code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-ucum&system=http://loinc.org&code=20402-4&target=http://unitsofmeasure.org",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-ucum"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "20402-4"
+										},
+										{
+											"key": "target",
+											"value": "http://unitsofmeasure.org"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "7. Retrieve status for LOINC id in Labcodeset active/retired",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://labterminologie.nl/cs/labconcepts&code=1189-0&property=STATUS",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://labterminologie.nl/cs/labconcepts"
+										},
+										{
+											"key": "code",
+											"value": "1189-0"
+										},
+										{
+											"key": "property",
+											"value": "STATUS"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "8. Lookup all Labcodeset properties for LOINC code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://labterminologie.nl/cs/labconcepts&code=29522-0&property=*",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://labterminologie.nl/cs/labconcepts"
+										},
+										{
+											"key": "code",
+											"value": "29522-0"
+										},
+										{
+											"key": "property",
+											"value": "*"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "8. Lookup all Labcodeset properties for LOINC code (look up LOINC part",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://labterminologie.nl/cs/labconcepts&code=LP7753-9&property=*",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://labterminologie.nl/cs/labconcepts"
+										},
+										{
+											"key": "code",
+											"value": "LP7753-9"
+										},
+										{
+											"key": "property",
+											"value": "*"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "9. Retrieve all material codes - improved in R5 with properties in expansion",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://labterminologie.nl/vs/labconcepts-materials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/vs/labconcepts-materials"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "9. Lookup material details",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/CodeSystem/$lookup?system=http://snomed.info/sct&code=258577004&property=*",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "code",
+											"value": "258577004"
+										},
+										{
+											"key": "property",
+											"value": "*"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "10. Retrieve all Labcodeset UCUM units",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://labterminologie.nl/vs/labconcepts-ucum",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/vs/labconcepts-ucum"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "10. Retrieve all UCUM units (common and Labcodeset)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://unitsofmeasure.org/vs&includeDesignations=true",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://unitsofmeasure.org/vs"
+										},
+										{
+											"key": "includeDesignations",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "10. Lookup UCUM code for Dutch and English",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$lookup?system=http://unitsofmeasure.org&code=U/L",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$lookup"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://unitsofmeasure.org"
+										},
+										{
+											"key": "code",
+											"value": "U/L"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "11. Retrieve all ordinal result lists - find ConceptMap url",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap?url=http://labterminologie.nl/cm/labconcepts-outcomes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-outcomes",
+											"description": "_"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "11. Retrieve all ordinal result lists - read ConceptMap",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/?url=http://labterminologie.nl/cm/labconcepts-outcomes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										""
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-outcomes"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "13. Retrieve all LOINC codes in the Labcodeset with a particular LOINC component",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"parameter\": [\n        {\n            \"name\": \"valueSet\",\n            \"resource\": {\n                \"resourceType\": \"ValueSet\",\n                \"language\": \"nl-NL\",\n                \"extension\": [\n                    {\n                    \"url\": \"http://hl7.org/fhir/StructureDefinition/valueset-supplement\",\n                    \"valueCanonical\": \"http://labterminologie.nl/cs/labconcepts|20201022\"\n                    }\n                ],\n                \"compose\": {\n                    \"include\": [\n                        {\n                            \"system\": \"http://loinc.org\",\n                            \"valueSet\": \"http://labterminologie.nl/vs/labconcepts\",\n                            \"filter\": [\n                                {\n                                    \"property\": \"COMPONENT\",\n                                    \"op\": \"=\",\n                                    \"value\": \"LP65332-6\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "14. Retrieve all LOINC codes whose LCN, displaynme or Dutch translation mtch a particular search string",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=http://labterminologie.nl/vs/labconcepts&filter=noro geno aanwez",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/vs/labconcepts"
+										},
+										{
+											"key": "filter",
+											"value": "noro geno aanwez"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "15. Given a SNOMED material, retrieve all LOINC codes which are associated with that material or with a material that subsumes it",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"parameter\": [\n        {\n            \"name\": \"valueSet\",\n            \"resource\": {\n                \"resourceType\": \"ValueSet\",\n                \"language\": \"nl-NL\",\n                \"extension\": [\n                    {\n                    \"url\": \"http://hl7.org/fhir/StructureDefinition/valueset-supplement\",\n                    \"valueCanonical\": \"http://labterminologie.nl/cs/labconcepts|20201022\"\n                    }\n                ],\n                \"compose\": {\n                    \"include\": [\n                        {\n                            \"system\": \"http://loinc.org\",\n                            \"version\": \"2.67\",\n                            \"valueSet\": \"http://labterminologie.nl/vs/labconcepts\",\n                            \"filter\": [\n                                {\n                                    \"property\": \"COMPONENT\",\n                                    \"op\": \"=\",\n                                    \"value\": \"LP65332-6\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-materials&target=http://loinc.org&code=119373006&system=http://snomed.info/sct&reverse=true",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-materials"
+										},
+										{
+											"key": "target",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "119373006"
+										},
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "reverse",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "15. Given a SNOMED material, a material that subsumes it",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"parameter\": [\n        {\n            \"name\": \"valueSet\",\n            \"resource\": {\n                \"resourceType\": \"ValueSet\",\n                \"compose\": {\n                    \"include\": [\n                        {\n                            \"system\": \"http://snomed.info/sct\",\n                            \"valueSet\": \"http://labterminologie.nl/vs/labconcepts-materials\",\n                            \"filter\": [\n                                {\n                                    \"property\": \"constraint\",\n                                    \"op\": \"=\",\n                                    \"value\": \">>119373006\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "15. Given a SNOMED material, a material that it subsumes",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"resourceType\": \"Parameters\",\n    \"parameter\": [\n        {\n            \"name\": \"valueSet\",\n            \"resource\": {\n                \"resourceType\": \"ValueSet\",\n                \"compose\": {\n                    \"include\": [\n                        {\n                            \"system\": \"http://snomed.info/sct\",\n                            \"valueSet\": \"http://labterminologie.nl/vs/labconcepts-materials\",\n                            \"filter\": [\n                                {\n                                    \"property\": \"constraint\",\n                                    \"op\": \"=\",\n                                    \"value\": \"<<119373006\"\n                                }\n                            ]\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "16. Retrieve material SCT codes for LOINC code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/ConceptMap/$translate?url=http://labterminologie.nl/cm/labconcepts-materials&system=http://loinc.org&code=29522-0&target=http://snomed.info/sct",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ConceptMap",
+										"$translate"
+									],
+									"query": [
+										{
+											"key": "url",
+											"value": "http://labterminologie.nl/cm/labconcepts-materials"
+										},
+										{
+											"key": "system",
+											"value": "http://loinc.org"
+										},
+										{
+											"key": "code",
+											"value": "29522-0"
+										},
+										{
+											"key": "target",
+											"value": "http://snomed.info/sct"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "16. Is specimen subsumed by material matched to LOINC code",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/fhir/CodeSystem/$subsumes?system=http://snomed.info/sct&codeA=122575003&codeB=446846006",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"CodeSystem",
+										"$subsumes"
+									],
+									"query": [
+										{
+											"key": "system",
+											"value": "http://snomed.info/sct"
+										},
+										{
+											"key": "codeA",
+											"value": "122575003"
+										},
+										{
+											"key": "codeB",
+											"value": "446846006"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
 				}
 			]
 		}
