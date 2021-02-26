@@ -6,7 +6,7 @@ Er zijn twee manieren om de gebruikersnaam en het wachtwoord toe te voegen aan d
 - Collection variabelen
 - Environment variabelen
 
-De __collection__ zoals die in deze repository te downloadn is, bevat een __prerequest script__ dat de gebruikersnaam en wachtwoord uit variabelen ophaalt. Hierbij geldt dat er eerst wordt gekeken naar variabelen in de __collection__, en indien deze leeg of afwezig zijn, wordt gezocht in de __environment__. Hier onder volgt voor beide manieren een uitleg.
+De __collection__ zoals die in deze repository te downloaden is, bevat een __prerequest script__ dat de gebruikersnaam en wachtwoord uit variabelen ophaalt. Hierbij geldt dat er eerst wordt gekeken naar variabelen in de __collection__, en indien deze leeg of afwezig zijn, wordt gezocht in de __environment__. Hier onder volgt voor beide manieren een uitleg.
 
 Wanneer je meerdere collections wilt aanmaken met verschillende requests, kan het nuttig zijn om de inloggegevens op environment-niveau te definiëren. Zo zijn deze gegevens altijd gelijk voor alle collections. Wanneer je slechts 1 collection hebt voor de Nationale Terminologieserver, is het veiliger om de inloggegevens aan de collection te hangen, zodat deze niet per ongeluk in een andere collection gebruikt kunnen worden.
 
