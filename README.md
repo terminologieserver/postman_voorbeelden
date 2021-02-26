@@ -1,6 +1,13 @@
 # postman
 Voorbeelden voor het gebruik van de FHIR API, gedocumenteerd als een Postman collectie. Importeer het JSON bestand in deze map in postman, en creëer een *environment* met variabelen *username* en *password*.
 
+## Importeren
+Het importeren van het JSON bestand kan via de knop bovenin de linker kolom:
+
+   ![Instellingen collection](screenshots/import_json.png)
+   
+De collectie met voorbeelden verschijnt vervolgens in de linker kolom als __Voorbeelden Nationale Terminologieserver [incl authenticatie]__.
+
 ## Toevoegen gebruikersnaam en wachtwoord
 Er zijn twee manieren om de gebruikersnaam en het wachtwoord toe te voegen aan de collection.
 - Collection variabelen
