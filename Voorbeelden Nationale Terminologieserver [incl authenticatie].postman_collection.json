@@ -382,7 +382,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/fhir/CodeSystem?_elements=name,url,version&url=http://snomed.info/sct",
+							"raw": "{{url}}/fhir/CodeSystem?_elements=name,url,version",
 							"host": [
 								"{{url}}"
 							],
@@ -410,7 +410,8 @@
 								{
 									"key": "url",
 									"value": "http://snomed.info/sct",
-									"description": "snomed"
+									"description": "snomed",
+									"disabled": true
 								}
 							]
 						}
@@ -675,6 +676,62 @@
 											"key": "url",
 											"value": "http://hl7.org/fhir/sid/icd-10-nl/vs"
 										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Toon nieuwe concepten in refset (Versie A vs B)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"resourceType\": \"Parameters\",\r\n        \"parameter\": [\r\n            {\r\n                \"name\": \"valueSet\",\r\n                \"resource\": {\r\n                    \"resourceType\": \"ValueSet\",\r\n                    \"compose\": {\r\n                        \"include\": [\r\n                            {\r\n                                \"system\": \"http://snomed.info/sct\",\r\n                                \"version\": \"http://snomed.info/sct/11000146104/version/20200930\",\r\n                                \"filter\": [\r\n                                    {\r\n                                        \"property\": \"concept\",\r\n                                        \"op\": \"in\",\r\n                                        \"value\": \"723264001\"\r\n                                    }\r\n                                ]\r\n                            }\r\n                        ],\r\n                        \"exclude\": [\r\n                            {\r\n                                \"system\": \"http://snomed.info/sct\",\r\n                                \"version\": \"http://snomed.info/sct/11000146104/version/20200331\",\r\n                                \"filter\": [\r\n                                    {\r\n                                        \"property\": \"concept\",\r\n                                        \"op\": \"in\",\r\n                                        \"value\": \"723264001\"\r\n                                    }\r\n                                ]\r\n                            }\r\n                        ]\r\n                    }\r\n                }\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Toon verwijderde concepten in refset (Versie B vs A)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "    {\r\n        \"resourceType\": \"Parameters\",\r\n        \"parameter\": [\r\n            {\r\n                \"name\": \"valueSet\",\r\n                \"resource\": {\r\n                    \"resourceType\": \"ValueSet\",\r\n                    \"compose\": {\r\n                        \"include\": [\r\n                            {\r\n                                \"system\": \"http://snomed.info/sct\",\r\n                                \"version\": \"http://snomed.info/sct/11000146104/version/20200331\",\r\n                                \"filter\": [\r\n                                    {\r\n                                        \"property\": \"concept\",\r\n                                        \"op\": \"in\",\r\n                                        \"value\": \"723264001\"\r\n                                    }\r\n                                ]\r\n                            }\r\n                        ],\r\n                        \"exclude\": [\r\n                            {\r\n                                \"system\": \"http://snomed.info/sct\",\r\n                                \"version\": \"http://snomed.info/sct/11000146104/version/20200930\",\r\n                                \"filter\": [\r\n                                    {\r\n                                        \"property\": \"concept\",\r\n                                        \"op\": \"in\",\r\n                                        \"value\": \"723264001\"\r\n                                    }\r\n                                ]\r\n                            }\r\n                        ]\r\n                    }\r\n                }\r\n            }\r\n        ]\r\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
 									]
 								}
 							},
@@ -1016,7 +1073,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}/fhir/ValueSet/$expand?url=https://terminologieserver.nl/uri/vs/snomed-patient-friendly-terms&includeDesignations=true&filter=74400008&displayLanguage=nl-NL-x-sctlang-15551000-146102",
+									"raw": "{{url}}/fhir/ValueSet/$expand?url=https://terminologieserver.nl/uri/vs/snomed-patient-friendly-terms&includeDesignations=true&filter=74400008",
 									"host": [
 										"{{url}}"
 									],
@@ -1035,20 +1092,46 @@
 											"value": "true"
 										},
 										{
-											"key": "filter",
-											"value": "74400008"
-										},
-										{
 											"key": "includeDefinition",
 											"value": "true",
 											"disabled": true
 										},
 										{
-											"key": "displayLanguage",
-											"value": "nl-NL-x-sctlang-15551000-146102"
+											"key": "filter",
+											"value": "74400008"
 										}
 									]
-								}
+								},
+								"description": "Met deze request is het mogelijk om de patiëntvriendelijke term voor een SNOMED ID op te halen. Deze request geeft 0 resultaten wanneer een code niet in het Patiëntvriendelijke CodeSystem Supplement voorkomt! Wanneer dit gedrag ongewenst is, en álle termen opgehaald moeten worden, gebruik het POST voorbeeld in deze map."
+							},
+							"response": []
+						},
+						{
+							"name": "SNOMED ValueSet $expand + filter op geheel SNOMED+Patiëntvriendelijk supplement",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"resourceType\": \"Parameters\",\r\n    \"parameter\": [\r\n        {\r\n            \"name\" : \"includeDesignations\",\r\n            \"valueBoolean\" : true\r\n        },\r\n        {\r\n            \"name\": \"valueSet\",\r\n            \"resource\": {\r\n                \"resourceType\": \"ValueSet\",\r\n                \"language\": \"nl-NL-x-sctlang-15551000-146102\",\r\n                \"extension\": [\r\n                    {\r\n                    \"url\": \"http://hl7.org/fhir/StructureDefinition/valueset-supplement\",\r\n                    \"valueCanonical\": \"https://terminologieserver.nl/uri/cs/snomed-patient-friendly-terms|20200930\"\r\n                    }\r\n                ],\r\n                \"compose\": {\r\n                    \"include\": [\r\n                        {\r\n                            \"system\": \"http://snomed.info/sct\",\r\n                            \"filter\": [\r\n                                {\r\n                                    \"property\": \"concept\",\r\n                                    \"op\": \"is-a\",\r\n                                    \"value\": \"74400008\"\r\n                                }\r\n                            ]\r\n                        }\r\n                    ]\r\n                }\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/fhir/ValueSet/$expand",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"fhir",
+										"ValueSet",
+										"$expand"
+									]
+								},
+								"description": "Met deze request is het mogelijk om de patiëntvriendelijke term voor een SNOMED ID op te halen. Deze request geeft alle designations terug, maar gebruikt de Patiëntvriendelijke taalreferentieset voor de display value, indien beschikbaar. Er wordt teruggevallen op NL > EN."
 							},
 							"response": []
 						},
@@ -1928,8 +2011,6 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"// Adapted from: https://gist.github.com/harryi3t/dd5c61451206047db70710ff6174c3c1",
-					"",
 					"let tokenUrl = 'https://terminologieserver.nl/auth/realms/nictiz/protocol/openid-connect/token';",
 					"",
 					"let getTokenRequest = {",
@@ -1942,8 +2023,8 @@
 					"    body: {",
 					"        mode: 'urlencoded',",
 					"        urlencoded: [",
-					"            { key: \"username\", value: pm.environment.get(\"username\") },",
-					"            { key: \"password\", value: pm.environment.get(\"password\") },",
+					"            { key: \"username\", value: pm.variables.get(\"username\") },",
+					"            { key: \"password\", value: pm.variables.get(\"password\") },",
 					"            { key: \"client_id\", value: 'cli_client' },",
 					"            { key: \"client_secret\", value: '' },",
 					"            { key: 'grant_type', value: 'password' },",
@@ -1984,10 +2065,6 @@
 		},
 		{
 			"key": "password",
-			"value": ""
-		},
-		{
-			"key": "accessToken",
 			"value": ""
 		}
 	]
