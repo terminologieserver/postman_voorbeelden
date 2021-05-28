@@ -1,5 +1,4 @@
 *For  English click [here: ](https://github.com/micverb/postman_voorbeelden/blob/main/README_ENG.md)*
-
 # postman
 Voorbeelden voor het gebruik van de FHIR API, gedocumenteerd als een Postman collectie. Importeer het JSON bestand in deze map in postman, en creëer een *environment* met variabelen *username* en *password*.
 
